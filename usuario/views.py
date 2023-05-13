@@ -49,7 +49,9 @@ def get_usuario_by_correo(request, pk):
             # Comparar el role obtenido con el role del usuario consultado
             if role == usuario_dto.rol:
                 # Role coincide
-                return render(request, 'usuario.html', context)
+               # return render(request, 'usuario.html', context)
+                return HttpResponse(usuario_dto.rol)
+        
             else:
                 # Role no coincide
                 return HttpResponse('El role obtenido no coincide con el role del usuario', status=400)
