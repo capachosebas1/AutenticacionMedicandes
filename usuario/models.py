@@ -1,6 +1,4 @@
 from django.db import models
-from usuario.models import Usuario
-
 
 class Usuario(models.Model):
     correo = models.CharField(max_length=50)
