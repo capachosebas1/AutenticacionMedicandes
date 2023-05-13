@@ -32,7 +32,7 @@ def get_usuarios(request):
         if role == "Doctor":
             usuario_dto = ul.get_usuarios()
             usuarios = serializers.serialize('json', usuario_dto,)
-            return HttpResponse(usuarios, 'application/json')
+            return HttpResponse(role, 'application/json')
         else:
             return HttpResponse("Unauthorized User")
 
