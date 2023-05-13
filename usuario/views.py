@@ -15,8 +15,22 @@ from autenticacion.auth0backend import getRole
 def get_usuario_by_pk(request, pk):
     if request.method == 'GET':
         usuario_dto = ul.get_usuario(pk)
-        usuario = serializers.serialize('json', [usuario_dto,])
-        return HttpResponse(usuario, 'application/json')
+        if usuario_dto is not None:
+            role = getRole(usuario_dto)  # Obtén el role del usuario
+            
+            # Comparar el role obtenido con el role del usuario consultado
+            if role == usuario_dto.role:
+                # Role coincide
+                usuario = serializers.serialize('json', [usuario_dto,])
+                return HttpResponse(usuario, 'application/json')
+            else:
+                # Role no coincide
+                return HttpResponse('El role obtenido no coincide con el role del usuario', status=400)
+        
+        else:
+            return HttpResponse('No se encontró ningún usuario con el correo proporcionado', status=404)
+
+        
 
     if request.method == 'PUT':
         data = json.loads(request.body)
@@ -32,24 +46,6 @@ def get_usuarios(request):
         usuarios = serializers.serialize('json', usuario_dto,)
         return HttpResponse(usuarios, 'application/json')
 
-@csrf_exempt
-def get_usuario_by_correo(request, pk):
-    if request.method == 'GET':
-        usuario_dto = ul.get_usuario(pk)
-        
-        if usuario_dto is not None:
-            role = getRole(usuario_dto)  # Obtén el role del usuario
-            
-            # Comparar el role obtenido con el role del usuario consultado
-            if role == usuario_dto.role:
-                # Role coincide
-                return HttpResponse('Usuario encontrado. Role: ' + role)
-            else:
-                # Role no coincide
-                return HttpResponse('El role obtenido no coincide con el role del usuario', status=400)
-        
-        else:
-            return HttpResponse('No se encontró ningún usuario con el correo proporcionado', status=404)
 
 @csrf_exempt
 def create_usuario(request):
