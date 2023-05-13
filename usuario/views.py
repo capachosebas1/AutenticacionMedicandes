@@ -35,7 +35,7 @@ def get_usuarios(request):
 @csrf_exempt
 def get_usuario_by_correo(request, pk):
     if request.method == 'GET':
-        correo = pk  # Obtén el valor del parámetro 'pk'
+        correo = pk  # Obtén el valor del parámetro 'pk' como cadena de texto
         usuario_dto = ul.get_usuario(correo)  # Obtén el usuario según el correo
         
         if usuario_dto is not None:
