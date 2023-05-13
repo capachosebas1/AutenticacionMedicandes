@@ -9,10 +9,10 @@ from django.urls import reverse
 from .forms import UsuarioForm
 from .logic.usuario_logic import create_usuario
 from django.contrib.auth.decorators import login_required
-#from autenticacion.auth0backend import getRole
+from autenticacion.auth0backend import getRole
 
 @csrf_exempt
-def usuario_view(request, pk):
+def get_usuario_by_pk(request, pk):
     if request.method == 'GET':
         usuario_dto = ul.get_usuario(pk)
         usuario = serializers.serialize('json', [usuario_dto,])
@@ -21,31 +21,46 @@ def usuario_view(request, pk):
     if request.method == 'PUT':
         data = json.loads(request.body)
         rol = data.get("rol")
- 
+
         usuario_dto = ul.update_usuario(pk, rol)
-        usuario = serializers.serialize('json', [usuario,])
+        usuario = serializers.serialize('json', [usuario_dto,])
         return HttpResponse(usuario, 'application/json')
 
-def usuarios_view(request):
-
+def get_usuarios(request):
     if request.method == 'GET':
         usuario_dto = ul.get_usuarios()
         usuarios = serializers.serialize('json', usuario_dto,)
         return HttpResponse(usuarios, 'application/json')
 
+@csrf_exempt
+def get_usuario_by_correo(request):
+    if request.method == 'GET':
+        correo = request.GET.get('correo')  # Obtén el valor del parámetro 'correo' de la solicitud GET
+        usuario_dto = ul.get_usuario(correo)  # Obtén el usuario según el correo
+        
+        if usuario_dto is not None:
+            role = getRole(usuario_dto)  # Obtén el role del usuario
+            
+            # Comparar el role obtenido con el role del usuario consultado
+            if role == usuario_dto.role:
+                # Role coincide
+                return HttpResponse('Usuario encontrado. Role: ' + role)
+            else:
+                # Role no coincide
+                return HttpResponse('El role obtenido no coincide con el role del usuario', status=400)
+        
+        else:
+            return HttpResponse('No se encontró ningún usuario con el correo proporcionado', status=404)
 
 @csrf_exempt
-def usuario_view(request):
-    
+def create_usuario(request):
     if request.method == 'POST':
         usuario_dto = ul.create_usuario(json.loads(request.body))
         usuario = serializers.serialize('json', [usuario_dto,])
         return HttpResponse(usuario, 'application/json')
-        
-        
+
 #@login_required
 def usuario_create(request):
-
     if request.method == 'POST':
         form = UsuarioForm(request.POST)
         if form.is_valid():
@@ -61,4 +76,3 @@ def usuario_create(request):
         'form': form,
     }
     return render(request, 'Usuario/usuarioCreate.html', context)
-
