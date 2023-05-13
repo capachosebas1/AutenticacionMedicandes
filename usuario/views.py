@@ -50,7 +50,7 @@ def get_usuario_by_correo(request, pk):
             if role == usuario_dto.rol:
                 # Role coincide
                # return render(request, 'usuario.html', context)
-                return HttpResponse(usuario_dto.rol)
+                return HttpResponse(role)
         
             else:
                 # Role no coincide
