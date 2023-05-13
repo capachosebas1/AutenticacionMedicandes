@@ -28,9 +28,13 @@ def get_usuario_by_pk(request, pk):
 
 def get_usuarios(request):
     if request.method == 'GET':
-        usuario_dto = ul.get_usuarios()
-        usuarios = serializers.serialize('json', usuario_dto,)
-        return HttpResponse(usuarios, 'application/json')
+        role = getRole(request)
+        if role == "Doctor":
+            usuario_dto = ul.get_usuarios()
+            usuarios = serializers.serialize('json', usuario_dto,)
+            return HttpResponse(usuarios, 'application/json')
+        else:
+            return HttpResponse("Unauthorized User")
 
 @login_required
 def get_usuario_by_correo(request, pk):
