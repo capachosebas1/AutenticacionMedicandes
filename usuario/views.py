@@ -33,9 +33,9 @@ def get_usuarios(request):
         return HttpResponse(usuarios, 'application/json')
 
 @csrf_exempt
-def get_usuario_by_correo(request):
+def get_usuario_by_correo(request, pk):
     if request.method == 'GET':
-        correo = request.GET.get('correo')  # Obtén el valor del parámetro 'correo' de la solicitud GET
+        correo = pk  # Obtén el valor del parámetro 'pk'
         usuario_dto = ul.get_usuario(correo)  # Obtén el usuario según el correo
         
         if usuario_dto is not None:

@@ -8,7 +8,7 @@ from . import views
 urlpatterns = [
     path('', views.get_usuarios, name='usuarios_view'),
     path('<int:pk>', views.get_usuario_by_pk, name='get_usuario_by_pk'),
-    path('usuario_view/<str:pk>', views.get_usuario_by_correo, name='get_usuario_by_correo'),
+     path('usuario_view/<str:pk>/', views.get_usuario_by_correo, name='get_usuario_by_correo'),
     path('usuarioCreate/', views.create_usuario, name='usuario_create'),
 ]
 
