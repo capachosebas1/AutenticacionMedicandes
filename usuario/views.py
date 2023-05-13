@@ -44,7 +44,7 @@ def get_usuario_by_correo(request, pk):
         'usuario': usuario_dto
         }
         if usuario_dto is not None:
-            role = getRole(usuario_dto)  # Obtén el role del usuario
+            role = getRole(request)  # Obtén el role del usuario
             
             # Comparar el role obtenido con el role del usuario consultado
             if role == usuario_dto.role:
