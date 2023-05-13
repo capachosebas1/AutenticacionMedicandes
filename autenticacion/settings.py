@@ -79,8 +79,8 @@ WSGI_APPLICATION = 'autenticacion.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'monitoring_db',
-        'USER': 'monitoring_user',
+        'NAME': 'autenticacion_db',
+        'USER': 'autenticacion_user',
         'PASSWORD': 'isis2503',
         'HOST': '10.128.0.10',
         'PORT': '5432',
